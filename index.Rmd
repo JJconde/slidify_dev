@@ -11,20 +11,68 @@ mode        : selfcontained # {standalone, draft}
 knit        : slidify::knit2slides
 ---
 
+```{r, echo=FALSE}
+library(maps)
+library(mapproj)
+setwd("C:/Users/Meow/Documents/R/Working Directory/census-app")
+source("helpers.R")
+counties <- readRDS("data/counties.rds")
+counties <- counties[!is.na(counties$white), ]
+# Change the significant figures to 3
+counties$white <- signif(counties$white, digits=3)
+counties$black <- signif(counties$black, digits=3)
+counties$hispanic <- signif(counties$hispanic, digits=3)
+counties$asian <- signif(counties$asian, digits=3)
+# Change the name to upper case
+counties$name <- toupper(counties$name)
+# Format the name of the columns
+names(counties) = c("Name", "Total Population", "White", "Black", "Hispanic", "Asian")
+```
+
 ## 1 - Data
+
+<b>Have you ever been interested in How the United States look like?</b>
+
+
+a) The data came from U.S. Census Bureau for 2010.  
+
+b) As good as it gets.  
+
+c) Has a reputation for accuracy.  
 
 ---
 
 ## 2 - Summary
 
+a) It will show Counties with the highest percentage by Race.  
+b) A Five-number summary showing the overall trend.  
+
+```{r, echo=FALSE}
+summary(counties$White)
+head(counties[order(counties$White, decreasing=TRUE), ], 5)
+```
+
 ---
 
 ## 3 - Map
+
+a) Interactive Heat map of the United States.  
+b) You will be able to control the percentage and race.
+
+```{r, echo=FALSE}
+percent_map(counties$White, "darkgreen", "% White", 0, 100)
+```
 
 ---
 
 ## 4 - Application
 
+a) Creates a Summary, and a Demographic Map using the 2010 US Census.  
 
+b) You can choose which Demographic to show, and what percent you're looking for.  
+
+c) <b>Summary</b>: This will show the Top 10 Counties for the selected Demographic, and a Five-number summary.
+
+d) <b>Map</b>: Based on the grouping, it will show a Heatmap of the Percentage in each Counties.
 
 
